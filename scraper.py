@@ -1,8 +1,8 @@
 import requests, bs4
 import schedule, time
-import pandas
 
 from data import *
+from configuration import *
 
 ### macros
 NULL_INT = 0
@@ -91,4 +91,5 @@ def scrape_current_day():
     ### print the raw data
     print_raw(current_time_data)
 
-scrape_current_day()
+config_init()
+#scrape_current_day()
