@@ -1,9 +1,9 @@
 ### covid-scraper
 
-**Reasoning**
+**Reasoning**\
 This Python application represents a web scraper that was designed to scrape data about COVID-19 from the website https://www.worldometers.info/. The idea was born from a personal desire to study the evolution of the virus by monitoring the daily evolution of the number of new cases in my home country. 
 
-**Application overview**
+**Application overview**\
 Currently, the application scrapes 6 points of interest:
     * the name of the country 'country_name'
     * the total number of cases in the given country 'total_cases'
