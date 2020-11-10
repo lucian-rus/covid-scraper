@@ -7,6 +7,7 @@ NULL   = 0
 ### macros used as parameters for config file edits
 LOG_PATH       = 'log_path'
 REFRESH_RATE   = 'refresh_rate'
+XLSX_PATH      = 'xlsx_path' 
 
 DB_FILE_PATH   = 'db_file_path'
 DB_LAST_UPDATE = 'db_last_update'
