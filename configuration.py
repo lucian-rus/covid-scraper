@@ -1,27 +1,31 @@
 import configparser
 import os 
 
+### todo
+#   better document the code 
+#   add function parameters description
+
 ### macros used for passing the status of a function
 NULL   = 0
 
 ### macros used as parameters for config file edits
-LOG_PATH       = 'log_path'
-REFRESH_RATE   = 'refresh_rate'
-XLSX_PATH      = 'xlsx_path' 
+CONFIG_LOG_PATH       = 'log_path'
+CONFIG_REFRESH_RATE   = 'refresh_rate'
+CONFIG_XLSX_PATH      = 'xlsx_path' 
 
-DB_FILE_PATH   = 'db_file_path'
-DB_LAST_UPDATE = 'db_last_update'
+CONFIG_DB_FILE_PATH   = 'db_file_path'
+CONFIG_DB_LAST_UPDATE = 'db_last_update'
 
-COUNTRY_NAME   = 'country_name'
-TOTAL_CASES    = 'total_cases'
-NEW_CASES      = 'new_cases'   
-CASES_STATUS   = 'cases_status'  
-TOTAL_DEATHS   = 'total_deaths'  
-NEW_DEATHS     = 'new_deaths'    
-DEATHS_STATUS  = 'deaths_status' 
-CASES_BY_POP   = 'cases_by_pop'  
-DEATHS_BY_POP  = 'deaths_by_pop'
-POPULATION     = 'population'    
+CONFIG_COUNTRY_NAME   = 'country_name'
+CONFIG_TOTAL_CASES    = 'total_cases'
+CONFIG_NEW_CASES      = 'new_cases'   
+CONFIG_CASES_STATUS   = 'cases_status'  
+CONFIG_TOTAL_DEATHS   = 'total_deaths'  
+CONFIG_NEW_DEATHS     = 'new_deaths'    
+CONFIG_DEATHS_STATUS  = 'deaths_status' 
+CONFIG_CASES_BY_POP   = 'cases_by_pop'  
+CONFIG_DEATHS_BY_POP  = 'deaths_by_pop'
+CONFIG_POPULATION     = 'population'    
 
 SETTINGS     = {'log_path', 'refresh_rate'}
 DATABASE     = {'db_file_path', 'db_last_update'}

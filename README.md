@@ -16,7 +16,7 @@ What to expect from further updates to this project:\
     * integrated statistics\
     * more user control regarding what is being scraped and how it is stored and displayed\
     * fully automated scraping at a user defined time rate\
-    * *maybe a GUI*\
+    * *maybe a GUI*
 
 
 **note**: the specific webpage that is being parsed by this application can be found [here](https://www.worldometers.info/coronavirus/). *This project is currently work in progress.* 

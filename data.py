@@ -1,6 +1,11 @@
 import pandas
 from xlwt import Workbook
 
+### todo
+#   allow excel file exporting based on the dataframes
+#   better document the code 
+#   add function parameters description
+
 class ScrapedData:
     ### class constructor containing all the scraped data
     def __init__(self, id, country_name, total_cases, new_cases, total_deaths,
@@ -20,13 +25,12 @@ def create_dataframe(list_raw):
     country_name  = []
     total_cases   = []
     new_cases     = []
-    #cases_status  = []
     total_deaths  = []
     new_deaths    = []
-    #deaths_status = []
     total_tests   = []
     population    = []
         
+    ### iterate through the raw list and create the dataframe
     for obj in list_raw:
         country_name.append(obj.country_name)
         total_cases.append(obj.total_cases)
@@ -39,6 +43,12 @@ def create_dataframe(list_raw):
     table_raw = pandas.DataFrame(list(zip(country_name, total_cases, new_cases, total_deaths, new_deaths, total_tests, population)),
                                 columns = ['country', 'total cases', 'new cases', 'total deaths', 'new deaths', 'total tests', 'population'])
     pandas.set_option('display.max_rows', MAX_ROWS)
+    
+    ### clear the lists after building the dataframe
+    country_name.clear()
+    total_cases.clear()
+    new_cases.clear()
+    total_deaths.clear()
     return table_raw
 
 ### print the raw data scraped 
@@ -49,23 +59,8 @@ def print_raw(data_raw):
 NULL = 0
 ### function that creates a .xlsx file based on the scraped data
 def export_raw_xlsx(data_raw):
-    
-    ### create a new workbook and add a sheet
-    write_file = Workbook()
-    sheet = write_file.add_sheet('test')
-
-    ### iterate through the raw data and write it to the file
-    row = NULL
-    for obj in data_raw:
-        sheet.write(obj.id, 0, obj.country_name)
-        sheet.write(obj.id, 1, obj.total_cases)
-        sheet.write(obj.id, 2, obj.new_cases)
-        sheet.write(obj.id, 3, obj.total_deaths)
-        sheet.write(obj.id, 4, obj.new_deaths)
-        sheet.write(obj.id, 5, obj.total_tests)
-        sheet.write(obj.id, 6, obj.population)
-
-    write_file.save('test.xls')
+    dataframe_raw = create_dataframe(data_raw)
+    dataframe_raw.to_excel('test.xsl')
     print('done...')
 
 
