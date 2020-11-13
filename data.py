@@ -1,5 +1,9 @@
+### this file handles the dataframe related functions and printing
+
 import pandas
 from xlwt import Workbook
+
+from macros import *
 
 ### todo
 #   allow excel file exporting based on the dataframes
@@ -57,11 +61,17 @@ def print_raw(data_raw):
     print(dataframe_raw)
 
 NULL = 0
-### function that creates a .xlsx file based on the scraped data
+### function that export raw scraped data to a .xls file 
 def export_raw_xlsx(data_raw):
-    dataframe_raw = create_dataframe(data_raw)
-    dataframe_raw.to_excel('test.xsl')
-    print('done...')
+    table_raw = create_dataframe(data_raw)
+
+    try:
+        title = 'text.xls'
+        path = 'resources/spreadsheets/' + title
+        table_raw.to_excel(path)
+        print('table {} printed succesfully...'.format(title))
+    except Exception as e:
+        print(e)
 
 
         

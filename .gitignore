@@ -1,0 +1,12 @@
+
+.vscode/.ropeproject/config.py
+.vscode/.ropeproject/objectdb
+__pycache__/data.cpython-39.pyc
+__pycache__/scraper.cpython-39.pyc
+__pycache__/macros.cpython-39.pyc
+__pycache__/data.cpython-39.pyc
+__pycache__/database.cpython-39.pyc
+__pycache__/scraper.cpython-39.pyc
+*.pyc
+__pycache__/data.cpython-39.pyc
+*.pyc

@@ -1,14 +1,15 @@
+### this file handles the configuration related functions
+
 import configparser
 import os 
+
+from macros import *
 
 ### todo
 #   better document the code 
 #   add function parameters description
 
-### macros used for passing the status of a function
-NULL   = 0
-
-### macros used as parameters for config file edits
+### constants used as placeholders for the config file keys
 CONFIG_LOG_PATH       = 'log_path'
 CONFIG_REFRESH_RATE   = 'refresh_rate'
 CONFIG_XLSX_PATH      = 'xlsx_path' 
@@ -40,11 +41,13 @@ def create_config_file():
     ### create the settings configuration 
     config['settings'] = {
         'log_path'    : '',
-        'refresh_rate': ''
+        'refresh_rate': '',
+        'xls_path'    : ''
     }
 
     ### create the database configuration 
     config['database'] = {
+        'db_file_exists' : '',
         'db_file_path'   : '',
         'db_last_update' : ''
     }
@@ -60,6 +63,7 @@ def create_config_file():
         'deaths_status' : 'false',
         'cases_by_pop'  : 'true',
         'deaths_by_pop' : 'false',
+        'total_cases'   : 'false',
         'population'    : 'true'
     }
 

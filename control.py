@@ -1,5 +1,10 @@
+### this file handles the CLI related functions
+
 from scraper import *
 from database import *
+from macros import *
+
+### initial message
 print("additional information about this application as well as the code can be found at the link https://github.com/lucian-rus/covid-scraper. type 'help' for a list of commands")
 
 ### todo
@@ -27,15 +32,13 @@ def command_help():
     print('EXPORTRXLS       - export a .xlsx data file with data about the current day')
     print('SCRAPECDAY       - prints data about the current day')
     print('SCRAPEPDAY       - prints data about the previous day')
+    print('CURRDAYDATA      - prints data about the previous day')
+    print('     -c          - prints the total number of cases')
+    print('     -d          - prints the total number of deaths')
+    print('     -r          - prints the total number of recoveries')
 
-### MACROS
-RUN  = 1
-EXIT = 0
+### set the application loop to true
 LOOP = RUN
-
-### flags used to determine which day to scrape based on the tables name
-CURRENT_DAY  = '#main_table_countries_today tr'
-PREVIOUS_DAY = '#main_table_countries_yesterday tr'
 
 ### aplication loop
 while LOOP:
@@ -46,11 +49,20 @@ while LOOP:
     elif user_input == 'help':
         command_help()
     elif user_input == 'scrapecday':
-        scrape_current_day(CURRENT_DAY)
+        print_raw_data(TABLE, CURRENT_DAY)
     elif user_input == 'scrapepday':
-        scrape_current_day(PREVIOUS_DAY)
+        print_raw_data(TABLE, PREVIOUS_DAY)
     elif user_input == 'exportrxls':
-        command_error()
+        data_raw = get_raw_table_data(TABLE, CURRENT_DAY)
+        export_raw_xlsx(data_raw)
+    elif user_input == 'currdaydata':
+        aux_input = input()
+        if aux_input == '-c':
+            print_raw_data(CASES, NULL_TARGET)
+        if aux_input == '-d':
+            print_raw_data(DEATHS, NULL_TARGET)
+        if aux_input == '-r':
+            print_raw_data(RECOVERED, NULL_TARGET)
     elif user_input == 'debug':
         connect_database()
     else:

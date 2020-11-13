@@ -1,6 +1,10 @@
+### this file handles the database related functions
+
 import sqlite3, os
 from datetime import date
+
 from scraper import *
+from macros import *
 
 ### todo
 #   clean the code
