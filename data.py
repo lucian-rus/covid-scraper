@@ -3,7 +3,7 @@
 import pandas
 from xlwt import Workbook
 
-from macros import *
+from macro import *
 
 ### todo
 #   allow excel file exporting based on the dataframes
@@ -71,7 +71,7 @@ def export_raw_xlsx(data_raw):
         table_raw.to_excel(path)
         print('table {} printed succesfully...'.format(title))
     except Exception as e:
-        print(e)
+        logging.error(e)
 
 
         

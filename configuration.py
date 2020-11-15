@@ -3,14 +3,15 @@
 import configparser
 import os 
 
-from macros import *
+from macro import *
 
 ### todo
 #   better document the code 
 #   add function parameters description
 
 ### constants used as placeholders for the config file keys
-CONFIG_LOG_PATH       = 'log_path'
+CONFIG_RTMLOG_PATH    = 'runtime_log_path'
+CONFIG_DEBLOG_PATH    = 'debug_log_path'
 CONFIG_REFRESH_RATE   = 'refresh_rate'
 CONFIG_XLSX_PATH      = 'xlsx_path' 
 
@@ -105,11 +106,12 @@ def get_config_property(key):
 
     return value
 
-def config_init():
+def check_for_path():
     ### check for the existence of a config file
-    config_file = not os.path.exists('config.ini')
+    path_exists = not os.path.exists('config.ini')
 
-    if config_file:
+    if path_exists:
+        print('config file does not exit. creating config file...')
         create_config_file()
     else:
-        print('config file already exists')
+        print('config already exists')

@@ -1,10 +1,10 @@
 ### this file handles the scraping of the table
 
 import requests, bs4
-import schedule, datetime
+import schedule
 
 from data import *
-from macros import *
+from macro import *
 ### todo
 #   better document the code 
 #   add function parameters description
@@ -36,7 +36,8 @@ def init_scraper(target_type, target):
     page = requests.get(PAGE_URL)
     ### parse table with bs4
     page_soup = bs4.BeautifulSoup(page.text, 'html.parser')
-
+    log(INFO, 'succesfully connected to the target page')
+  
     if target_type == TABLE:
         return scrape_table_data(page_soup, target)
     else:
