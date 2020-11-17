@@ -1,6 +1,6 @@
 ### this file handles the dataframe related functions and printing
 
-import pandas
+import pandas, os
 from xlwt import Workbook
 
 from macro import *
@@ -66,12 +66,15 @@ def export_raw_xlsx(data_raw):
     table_raw = create_dataframe(data_raw)
 
     try:
-        title = 'text.xls'
-        path = 'resources/spreadsheets/' + title
-        table_raw.to_excel(path)
+        dir_path = os.path.dirname(__file__)
+        title = 'test.xls'
+        path = '..\\resources\\spreadsheets\\' + title
+        relative_path = os.path.relpath(path, dir_path)
+
+        table_raw.to_excel(relative_path)
         print('table {} printed succesfully...'.format(title))
     except Exception as e:
-        logging.error(e)
+        log_app_event(APP_LOG, ERROR, e)
 
 
         

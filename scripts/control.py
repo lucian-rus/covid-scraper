@@ -3,12 +3,21 @@
 from scraper import *
 from database import *
 from macro import *
+from configuration import *
 
 ### initial message
 print("additional information about this application as well as the code can be found at the link https://github.com/lucian-rus/covid-scraper. type 'help' for a list of commands")
 
-if not init_log_file():
-    print('error creating log file...')
+### create application log file for the current session
+if not init_app_log_file():
+    print('error creating application log file...')
+
+### create database log file for the current session
+if not init_db_log_file():
+    print('error creating database log file...')
+
+### check for the existence of the configuration file
+#init_config_file()
 
 ### todo
 #   implement the basic ui and commands
@@ -17,7 +26,6 @@ if not init_log_file():
 #       * the total number of tests will be used to calculate the tests done in the current day
 #       * based on this, we can calculate the infection rate (new_tests / new_cases) to provide a better insight
 #   link the configuration to the scraper 
-#   add a save_to_spreadsheet option (for both current and previous day as well as database tables)
 #   use fire module to implement a better cli 
 #   better document the code 
 #   add function parameters description
@@ -46,7 +54,8 @@ while LOOP:
     user_input = input('cs-command> ')
 
     if user_input == 'exit':
-        log(INFO, 'logfile stopped')
+        log_app_event(APP_LOG, INFO, 'logfile stopped')
+        log_app_event(DB_LOG, INFO, 'logfile stopped')
         LOOP = EXIT
     elif user_input == 'help':
         command_help()
@@ -55,7 +64,7 @@ while LOOP:
     elif user_input == 'scrapepday':
         print_raw_data(TABLE, PREVIOUS_DAY)
     elif user_input == 'exportrxls':
-        data_raw = get_raw_table_data(TABLE, CURRENT_DAY)
+        data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
         export_raw_xlsx(data_raw)
     elif user_input == 'currdaydata':
         aux_input = input()
@@ -66,6 +75,6 @@ while LOOP:
         if aux_input == '-r':
             print_raw_data(RECOVERED, NULL_TARGET)
     elif user_input == 'debug':
-        init_log_file()
+        log_app_event(DB_LOG, INFO, 'TEST')
     else:
         command_error()
