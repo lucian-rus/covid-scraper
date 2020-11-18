@@ -1,9 +1,9 @@
 ### this file handles the dataframe related functions and printing
 
 import pandas, os
-from xlwt import Workbook
 
 from macro import *
+from configuration import *
 
 ### todo
 #   allow excel file exporting based on the dataframes
@@ -48,6 +48,7 @@ def create_dataframe(list_raw):
                                 columns = ['country', 'total cases', 'new cases', 'total deaths', 'new deaths', 'total tests', 'population'])
     pandas.set_option('display.max_rows', MAX_ROWS)
     
+    log_event(APP_LOG, INFO, 'new dataframe created')
     ### clear the lists after building the dataframe
     country_name.clear()
     total_cases.clear()
@@ -58,6 +59,7 @@ def create_dataframe(list_raw):
 ### print the raw data scraped 
 def print_raw(data_raw):
     dataframe_raw = create_dataframe(data_raw)
+    log_event(APP_LOG, INFO, 'printed requested dataframe to the terminal')
     print(dataframe_raw)
 
 NULL = 0
@@ -68,13 +70,15 @@ def export_raw_xlsx(data_raw):
     try:
         dir_path = os.path.dirname(__file__)
         title = 'test.xls'
-        path = '..\\resources\\spreadsheets\\' + title
+        path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_EXCEL_PATH) + title
         relative_path = os.path.relpath(path, dir_path)
 
         table_raw.to_excel(relative_path)
         print('table {} printed succesfully...'.format(title))
+        log_event(APP_LOG, INFO, 'exported the dataframe as .xls file ' + title)
+
     except Exception as e:
-        log_app_event(APP_LOG, ERROR, e)
+        log_event(APP_LOG, ERROR, e)
 
 
         

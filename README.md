@@ -20,6 +20,7 @@ What to expect from further updates to this project:\
     * *maybe a GUI*
 
 
-**note**: the specific webpage that is being parsed by this application can be found [here](https://www.worldometers.info/coronavirus/). *This project is currently work in progress.* 
+**note**: the specific webpage that is being parsed by this application can be found [here](https://www.worldometers.info/coronavirus/). *This project is currently work in progress.*\
+**note**: this is my first fully-fledged project written in Python, so updates may not come as often as I'd want to since I'm learning the language while working on it
 
 

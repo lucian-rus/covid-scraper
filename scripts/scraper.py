@@ -36,7 +36,7 @@ def init_scraper(target_type, target):
     page = requests.get(PAGE_URL)
     ### parse table with bs4
     page_soup = bs4.BeautifulSoup(page.text, 'html.parser')
-    log_app_event(APP_LOG, INFO, 'succesfully connected to the target page')
+    log_event(APP_LOG, INFO, 'connected to the target page https://www.worldometers.info/coronavirus/')
   
     if target_type == TABLE:
         return scrape_table_data(page_soup, target)
@@ -73,6 +73,7 @@ def scrape_table_data(page_soup, target):
 
     ### save the scraped table data into a list
     raw_scraped_data = []
+    log_event(APP_LOG, INFO, 'collecting requested data')
 
     ### iterate through the desired table
     for table_row in page_soup.select(target):
@@ -123,28 +124,32 @@ def scrape_table_data(page_soup, target):
 
             ### increment the cell counter
             cell_it += 1
-
         ### create list of objects with number of cases per country ###
         if country_name == "SKIP":
             continue
         raw_scraped_data.append(ScrapedData(country_id, country_name, total_cases, 
                                 new_cases, total_deaths, new_deaths, total_tests, population))
+    log_event(APP_LOG, INFO, 'done scraping. returning raw data')
     return raw_scraped_data
 
 ### scrape data from the page
 def scrape_page_data(page_soup, target_type):
     print('scraping data...')
+    log_event(APP_LOG, INFO, 'collecting requested data')
     result = page_soup.find_all('div', {'class': 'maincounter-number'})
 
     res_counter = NULL_INT
 
     ### check which data has been requested
     for obj in result:
-        if target_type == CASES and res_counter == SCRAPER_CASES: 
+        if target_type == CASES and res_counter == SCRAPER_CASES:
+            log_event(APP_LOG, INFO, 'done scraping. return requested data') 
             return obj.get_text()
         if target_type == DEATHS and res_counter == SCRAPER_DEATHS:
+            log_event(APP_LOG, INFO, 'done scraping. return requested data')
             return obj.get_text()
         if target_type == RECOVERED and res_counter == SCRAPER_RECOVERED:
+            log_event(APP_LOG, INFO, 'done scraping. return requested data')
             return obj.get_text()
         res_counter += 1
 

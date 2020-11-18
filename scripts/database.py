@@ -4,6 +4,7 @@ import sqlite3, os
 
 from scraper import *
 from macro import *
+from configuration import *
 
 ### todo
 #   clean the code
@@ -66,9 +67,13 @@ def print_from_table(cursor, DB_CONNECTION):
 ### create a database connection (or the database if it doesn't exist yet)
 def connect_database():
 
+    ### create database log file for the current session
+    if not init_db_log_file():
+        print('error creating database log file...')
+
    ### create a database file 
-    db_filename = 'database.db'
-    db_is_new = not os.path.exists(db_filename)
+    db_filename = '..\\resources\\database\\database.db'
+    db_is_new   = not os.path.exists(db_filename)
 
     ### create connection to local database and check if the file already exists ###
     DB_CONNECTION   = sqlite3.connect(db_filename)    
@@ -83,7 +88,3 @@ def connect_database():
 
     cursor = DB_CONNECTION.cursor()
     
-    if table_check:
-        #create_new_table(cursor, DB_CONNECTION)
-        #insert_into_table(cursor, DB_CONNECTION)
-        print_from_table(cursor, DB_CONNECTION) 
