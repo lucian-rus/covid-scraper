@@ -162,8 +162,7 @@ def print_raw_data(target_type, target):
 
     ### get the current local date and time
     current_time = datetime.datetime.now().strftime('%d-%m-%Y, %H:%M local time')
-
-    ### 
+    
     if target_type == CASES:
         result = init_scraper(target_type, target)
         print('as of {}, the total number of cases is: {}'.format(current_time, result))

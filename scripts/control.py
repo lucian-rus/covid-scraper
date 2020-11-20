@@ -1,5 +1,8 @@
 ### this file handles the CLI related functions
 
+import time
+
+from threading import Thread
 from scraper import *
 from database import *
 from macro import *
@@ -63,9 +66,17 @@ def application_loop(status):
             print_raw_data(TABLE, CURRENT_DAY)
         elif user_input == 'scrapepday':
             print_raw_data(TABLE, PREVIOUS_DAY)
-        elif user_input == 'exportrxls':
-            data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
-            export_raw_xlsx(data_raw)
+        elif user_input == 'exportrawdata':
+            aux_input = input()
+            if aux_input == '-x':
+                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
+                export_raw(TO_XLS, data_raw)
+            if aux_input == '-c':
+                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
+                export_raw(TO_CSV, data_raw)
+            if aux_input == '-j':
+                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
+                export_raw(TO_JSON, data_raw)
         elif user_input == 'currdaydata':
             aux_input = input()
             if aux_input == '-c':
@@ -104,5 +115,19 @@ def main():
         init_config_files()
 
     application_loop(RUN)
+
+### update scraped data 
+#def print_scraped_data():
+#    while RUN:
+#        print_raw_data(TABLE, CURRENT_DAY)
+#        time.sleep(30)
+
+#main_thread = Thread(target = main)
+#main_thread.start()
+#main_thread.join()
+
+#scrape_thread = Thread(target = print_scraped_data)
+#scrape_thread.start()
+#scrape_thread.join
 
 main()

@@ -19,6 +19,8 @@ CONFIG_REFRESH_STATUS = 'refresh_status'
 CONFIG_REFRESH_RATE   = 'refresh_rate'
 CONFIG_APP_LOG_PATH   = 'log_file_path'
 CONFIG_EXCEL_PATH     = 'excel_path'
+CONFIG_JSON_PATH      = 'json_path'
+CONFIG_CSV_PATH       = 'csv_path'
 
 ### function that creates the config file for the application 
 def create_app_config_file():
@@ -33,7 +35,9 @@ def create_app_config_file():
             CONFIG_REFRESH_STATUS : 'false',
             CONFIG_REFRESH_RATE   : '',
             CONFIG_APP_LOG_PATH   : '..\\resources\\logs\\app-logs\\',
-            CONFIG_EXCEL_PATH     : '..\\resources\\spreadsheets\\'
+            CONFIG_EXCEL_PATH     : '..\\resources\\output\\spreadsheets\\',
+            CONFIG_JSON_PATH      : '..\\resources\\output\\json\\',
+            CONFIG_CSV_PATH       : '..\\resources\\output\\csv\\'
         }
     )
 

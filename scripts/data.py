@@ -62,21 +62,49 @@ def print_raw(data_raw):
     log_event(APP_LOG, INFO, 'printed requested dataframe to the terminal')
     print(dataframe_raw)
 
-NULL = 0
+### flags that signal the the way the raw data will be exported
+TO_CSV  = 81
+TO_XLS  = 82
+TO_JSON = 83
+
 ### function that export raw scraped data to a .xls file 
-def export_raw_xlsx(data_raw):
+def export_raw(target, data_raw):
     table_raw = create_dataframe(data_raw)
 
-    try:
-        dir_path = os.path.dirname(__file__)
+    dir_path = os.path.dirname(__file__)
+    
+    if target == TO_XLS:    
         title = 'test.xls'
         path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_EXCEL_PATH) + title
-        relative_path = os.path.relpath(path, dir_path)
+    if target == TO_CSV:  
+        title = 'test.csv'  
+        path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_CSV_PATH) + title
+    if target == TO_JSON:
+        title = 'test.json'    
+        path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_JSON_PATH) + title
 
-        table_raw.to_excel(relative_path)
-        print('table {} printed succesfully...'.format(title))
-        log_event(APP_LOG, INFO, 'exported the dataframe as .xls file ' + title)
+    ### set relative path of the output file
+    target_path = os.path.relpath(path, dir_path)
+    
+    try:
+        if target == TO_XLS:
+            table_raw.to_excel(target_path)
+            log_event(APP_LOG, INFO, 'exported the dataframe as .xls file ' + title)
 
+        if target == TO_CSV:
+            table_raw.to_csv(target_path)
+            log_event(APP_LOG, INFO, 'exported the dataframe as .csv file ' + title)
+
+        if target == TO_JSON:
+            json_table = table_raw.to_json(orient='index')
+
+            ### parse the dataframe with the json module
+            parser = json.loads(json_table)
+            with open(target_path, 'w') as out:
+                json.dump(parser, out, indent=4)
+            log_event(APP_LOG, INFO, 'exported the dataframe as .json file ' + title)
+
+        print('dataframe {} exported succesfully...'.format(title))
     except Exception as e:
         log_event(APP_LOG, ERROR, e)
 
