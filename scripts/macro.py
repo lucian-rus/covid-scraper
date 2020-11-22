@@ -7,6 +7,8 @@ import os, shutil
 NULL   = 0
 OK     = 1
 NOT_OK = 0
+TRUE   = 'true'
+FALSE  = 'false'
 
 ### macros used inside the application loop 
 RUN  = 1

@@ -71,7 +71,7 @@ TO_JSON = 83
 def export_raw(target, data_raw):
     table_raw = create_dataframe(data_raw)
 
-    dir_path = os.path.dirname(__file__)
+    cwd_path = os.path.dirname(__file__)
     
     if target == TO_XLS:    
         title = 'test.xls'
@@ -84,7 +84,7 @@ def export_raw(target, data_raw):
         path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_JSON_PATH) + title
 
     ### set relative path of the output file
-    target_path = os.path.relpath(path, dir_path)
+    target_path = os.path.relpath(path, cwd_path)
     
     try:
         if target == TO_XLS:
@@ -108,5 +108,22 @@ def export_raw(target, data_raw):
     except Exception as e:
         log_event(APP_LOG, ERROR, e)
 
+### function that creates a temporary file 
+def export_temp_file(data_raw):
+    table_raw = create_dataframe(data_raw)
 
-        
+    cwd_path = os.path.dirname(__file__)
+    path = get_config_data(CONFIG_APP_FILE_PATH, CONFIG_TEMP_PATH)
+
+    target_path = os.path.relpath(path, cwd_path)
+    json_table = table_raw.to_json(orient='index')
+
+    try:
+        ### parse the dataframe with the json module
+        parser = json.loads(json_table)
+        with open(target_path, 'w') as out:
+            json.dump(parser, out, indent=4)
+        log_event(APP_LOG, INFO, 'exported the dataframe as temporary file')
+
+    except Exception as e:
+        log_event(APP_LOG, ERROR, e)

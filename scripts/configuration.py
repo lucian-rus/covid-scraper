@@ -21,6 +21,7 @@ CONFIG_APP_LOG_PATH   = 'log_file_path'
 CONFIG_EXCEL_PATH     = 'excel_path'
 CONFIG_JSON_PATH      = 'json_path'
 CONFIG_CSV_PATH       = 'csv_path'
+CONFIG_TEMP_PATH      = 'temp_path'
 
 ### function that creates the config file for the application 
 def create_app_config_file():
@@ -35,9 +36,10 @@ def create_app_config_file():
             CONFIG_REFRESH_STATUS : 'false',
             CONFIG_REFRESH_RATE   : '',
             CONFIG_APP_LOG_PATH   : '..\\resources\\logs\\app-logs\\',
-            CONFIG_EXCEL_PATH     : '..\\resources\\output\\spreadsheets\\',
+            CONFIG_EXCEL_PATH     : '..\\resources\\output\\xls\\',
             CONFIG_JSON_PATH      : '..\\resources\\output\\json\\',
-            CONFIG_CSV_PATH       : '..\\resources\\output\\csv\\'
+            CONFIG_CSV_PATH       : '..\\resources\\output\\csv\\', 
+            CONFIG_TEMP_PATH      : '..\\resources\\temp\\temp.json'
         }
     )
 
@@ -51,6 +53,7 @@ def create_app_config_file():
 
 ### flags used for the database config gile
 CONFIG_DB_PATH_EXISTS = 'db_path_exists'
+CONFIG_DATABASE_PATH  = 'database_path'
 CONFIG_DB_LAST_UPDATE = 'db_last_update'
 CONFIG_DB_LOG_PATH    = 'db_log_path'
 
@@ -64,6 +67,7 @@ def create_db_config_file():
     init_db_config[CONFIG_SETTINGS].append(
         {
             CONFIG_DB_PATH_EXISTS : 'false',
+            CONFIG_DATABASE_PATH  : '',
             CONFIG_DB_LAST_UPDATE : '',
             CONFIG_DB_LOG_PATH    : '..\\resources\\logs\\db-logs\\'
         }
@@ -93,6 +97,22 @@ def get_config_data(target_file, key):
 
     ### return the value of the requested key
     return result
+
+### function that updates the configuration data based on a key
+def update_config_data(target_file, key, update):
+    log_event(APP_LOG, INFO, 'requested update_config_data({}, {})'.format(target_file, key))
+
+    ### open the config file and search for the value stored by the given key
+    with open(target_file) as read_file:
+        data = json.load(read_file)
+
+    for obj in data[CONFIG_SETTINGS]:
+        obj[key] = update
+        
+    with open(target_file, 'w') as out:
+        json.dump(data, out, indent=2)
+
+    return OK
 
 ### initialise the configuration files
 def init_config_files():

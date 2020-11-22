@@ -2,7 +2,7 @@
 
 import time
 
-from threading import Thread
+from threading import *
 from scraper import *
 from database import *
 from macro import *
@@ -37,7 +37,10 @@ def command_error():
 def command_help():
     print('HELP             - prints a list of implemented commands')
     print('EXIT             - exits the applcation')
-    print('EXPORTRXLS       - export a .xlsx data file with data about the current day')
+    print('EXPORTRAWDATA    - export raw data files')
+    print('     -x          - exports the raw data as a .xls file')
+    print('     -j          - exports the raw data as a .json file')
+    print('     -c          - exports the raw data as a .csv file')
     print('SCRAPECDAY       - prints data about the current day')
     print('SCRAPEPDAY       - prints data about the previous day')
     print('CURRDAYDATA      - prints data about the previous day')
@@ -49,6 +52,12 @@ def command_help():
     print('     -a          - deletes the logs in the application log folder')
     print('     -d          - deletes the logs in the application log folder')
 
+### function that acts as a newsfeed
+def create_temp_file():
+    data_raw = get_raw_table_data(TABLE, CURRENT_DAY)
+    export_temp_file(data_raw)
+
+### function that handles the applcation loopss
 def application_loop(status):
     ### set the application loop to true
     LOOP = status
@@ -58,7 +67,12 @@ def application_loop(status):
         user_input = input('cs-command> ')
 
         if user_input == 'exit':
+            
+            update_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_STATUS, FALSE)
+            update_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_RATE, NULL_TARGET)
+            
             log_event(APP_LOG, INFO, 'logfile stopped')
+            
             LOOP = EXIT
         elif user_input == 'help':
             command_help()
@@ -69,7 +83,7 @@ def application_loop(status):
         elif user_input == 'exportrawdata':
             aux_input = input()
             if aux_input == '-x':
-                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
+                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday2 tr')
                 export_raw(TO_XLS, data_raw)
             if aux_input == '-c':
                 data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
@@ -96,7 +110,27 @@ def application_loop(status):
                 if aux_input2 == 'y':
                     delete_log_files(DB_LOG)
         elif user_input == 'debug':
-            print('test')
+            print(get_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_STATUS))
+        elif user_input == 'resetconfig':
+            init_config_files()
+            log_event(APP_LOG, INFO, 'requested configuration files reset')
+        elif user_input == 'connectdb':
+            if not init_db_log_file():
+                print('error creating database log file...')
+            create_new_table()
+            insert_into_table('ok')
+            print_from_table()
+        elif user_input == 'createtable':
+            print('ok')
+        elif user_input == 'newsfeed':
+            update_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_STATUS, TRUE)
+            timer = input('timer for refresh rate (in seconds): ')
+            timer = int(timer)
+            update_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_RATE, timer)
+
+            log_event(APP_LOG, INFO, 'newsfeed enabled with a refresh rate of {} minutes '.format(timer/60))
+
+            create_temp_file()
         else:
             command_error()
 
@@ -116,18 +150,10 @@ def main():
 
     application_loop(RUN)
 
-### update scraped data 
-#def print_scraped_data():
-#    while RUN:
-#        print_raw_data(TABLE, CURRENT_DAY)
-#        time.sleep(30)
+main_thread = Thread(target = main)
+main_thread.start()
+log_event(APP_LOG, INFO, 'main_thread started')
+main_thread.join()
 
-#main_thread = Thread(target = main)
-#main_thread.start()
-#main_thread.join()
-
-#scrape_thread = Thread(target = print_scraped_data)
 #scrape_thread.start()
 #scrape_thread.join
-
-main()

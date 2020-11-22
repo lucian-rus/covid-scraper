@@ -1,6 +1,7 @@
 ### this file handles the database related functions
 
 import sqlite3, os
+import datetime
 
 from scraper import *
 from macro import *
@@ -14,8 +15,12 @@ from configuration import *
 #   add function parameters description
 
 ### create a new table
-def create_new_table(cursor, DB_CONNECTION):
-    #today = date.today()
+def create_new_table():
+    ### establish database connection
+    db_connection = connect_database()
+    cursor = db_connection.cursor()
+
+    today = datetime.date.today()
     #title = 'date' +  today.strftime("%d%m%Y")
     title = 'test'
     query  = 'CREATE TABLE ' + title 
@@ -29,16 +34,19 @@ def create_new_table(cursor, DB_CONNECTION):
                 total_tests text NOT NULL,
                 population text NOT NULL
              ); '''
+
     cursor.execute(query)
     print('table created')
-    DB_CONNECTION.commit()
+    db_connection.commit()
 
 ### function that allows insertion into selected table
-def insert_into_table(cursor, DB_CONNECTION):
-    print('inserting...')
-    data = []
-    item = []
+def insert_into_table(origin):
+    ### establish database connection
+    db_connection = connect_database()
+    cursor = db_connection.cursor()
 
+    data = get_raw_table_data(TABLE, CURRENT_DAY)
+    item = []
     for obj in data:
         if obj.id == 0:
             continue
@@ -51,40 +59,39 @@ def insert_into_table(cursor, DB_CONNECTION):
         item.append(obj.total_tests)
         item.append(obj.population)
 
-        print(item)
         cursor.execute("INSERT INTO test VALUES (?,?,?,?,?,?,?,?)", item)
-        DB_CONNECTION.commit()
+        db_connection.commit()
         item.clear()
     print('inserted...\n')
 
 ### function that prints the selected table
-def print_from_table(cursor, DB_CONNECTION):
+def print_from_table():
+    ### establish database connection
+    db_connection = connect_database()
+    cursor = db_connection.cursor()
+
     cursor.execute('SELECT * FROM test')
     rows = cursor.fetchall()
     for row in rows:
         print(row)
 
+DATABASE_FILE = '..\\resources\\database\\database.db'
+
 ### create a database connection (or the database if it doesn't exist yet)
 def connect_database():
+    log_event(DB_LOG, INFO, 'database connection requested')
 
-    ### create database log file for the current session
-    if not init_db_log_file():
-        print('error creating database log file...')
+    if get_config_data(CONFIG_DB_FILE_PATH, CONFIG_DB_PATH_EXISTS) == FALSE:
+        log_event(DB_LOG, INFO, 'database file does not exist. creating database file')
+        update_config_data(CONFIG_DB_FILE_PATH, CONFIG_DB_PATH_EXISTS, TRUE)
 
-   ### create a database file 
-    db_filename = '..\\resources\\database\\database.db'
-    db_is_new   = not os.path.exists(db_filename)
+        ### update the database file path 
+        update_config_data(CONFIG_DB_FILE_PATH, CONFIG_DATABASE_PATH, DATABASE_FILE)
+
+    db_filename = get_config_data(CONFIG_DB_FILE_PATH, CONFIG_DATABASE_PATH)
 
     ### create connection to local database and check if the file already exists ###
-    DB_CONNECTION   = sqlite3.connect(db_filename)    
+    db_connection   = sqlite3.connect(db_filename)    
+    log_event(DB_LOG, INFO, 'database connection established')
 
-    table_check = True
-    if db_is_new:
-        print('database does not exist. creating local database file...')
-        connect_database()
-        table_check = False
-    else:
-        print('connecting to the database file...')
-
-    cursor = DB_CONNECTION.cursor()
-    
+    return db_connection
