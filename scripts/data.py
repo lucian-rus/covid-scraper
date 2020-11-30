@@ -1,6 +1,7 @@
 ### this file handles the dataframe related functions and printing
 
 import pandas, os
+import xlrd
 
 from macro import *
 from configuration import *
@@ -107,6 +108,44 @@ def export_raw(target, data_raw):
         print('dataframe {} exported succesfully...'.format(title))
     except Exception as e:
         log_event(APP_LOG, ERROR, e)
+
+### function that is used to import data from files 
+def import_raw(target_file):
+    try:
+        target = xlrd.open_workbook(target_file)
+        sheet = target.sheet_by_index(0)
+        
+        ### save the imported data to a list
+        raw_imported_data = []
+
+        ### variables that store the scraped data 
+        country_name  = NULL_DEF
+        total_cases   = NULL_DEF
+        new_cases     = NULL_DEF
+        total_deaths  = NULL_DEF
+        new_deaths    = NULL_DEF
+        total_tests   = NULL_DEF
+        population    = NULL_DEF
+        country_id    = 1
+        for i in range(sheet.nrows):
+            if i > 1:
+                country_name = sheet.cell_value(i, 1)
+                total_cases  = sheet.cell_value(i, 2)
+                new_cases    = sheet.cell_value(i, 3)
+                total_deaths = sheet.cell_value(i, 4)
+                new_deaths   = sheet.cell_value(i, 5)
+                total_tests  = sheet.cell_value(i, 6)
+                population   = sheet.cell_value(i, 7)
+
+                raw_imported_data.append(ScrapedData(country_id, country_name, total_cases, 
+                                new_cases, total_deaths, new_deaths, total_tests, population))
+                country_id += 1
+
+        return raw_imported_data
+
+    except Exception as e:
+        print(e)
+    return NOT_OK
 
 ### function that creates a temporary file 
 def export_temp_file(data_raw):

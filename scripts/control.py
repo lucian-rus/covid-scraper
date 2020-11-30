@@ -83,7 +83,7 @@ def application_loop(status):
         elif user_input == 'exportrawdata':
             aux_input = input()
             if aux_input == '-x':
-                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday2 tr')
+                data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
                 export_raw(TO_XLS, data_raw)
             if aux_input == '-c':
                 data_raw = get_raw_table_data(TABLE, '#main_table_countries_yesterday tr')
@@ -110,7 +110,8 @@ def application_loop(status):
                 if aux_input2 == 'y':
                     delete_log_files(DB_LOG)
         elif user_input == 'debug':
-            print(get_config_data(CONFIG_APP_FILE_PATH, CONFIG_REFRESH_STATUS))
+            data_raw = import_raw('..\\resources\\output\\xls\\date22112020.xls')
+            print_raw(data_raw)
         elif user_input == 'resetconfig':
             init_config_files()
             log_event(APP_LOG, INFO, 'requested configuration files reset')
